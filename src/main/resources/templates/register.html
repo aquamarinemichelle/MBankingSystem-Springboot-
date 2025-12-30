@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - MBank</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .register-container {
+            background-color: rgba(0,0,0,0.7);
+            padding: 40px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        }
+
+        .register-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 32px;
+        }
+
+        .register-container form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .register-container input {
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        .register-container input:focus {
+            outline: none;
+            box-shadow: 0 0 5px #f1c40f;
+        }
+
+        .register-container button {
+            padding: 15px;
+            background-color: #f1c40f;
+            color: #2c3e50;
+            font-weight: 700;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .register-container button:hover {
+            background-color: #d4ac0d;
+        }
+
+        .register-container .login-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .register-container .login-link a {
+            color: #f1c40f;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .register-container .login-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="register-container">
+    <h2>Create Account - MBank</h2>
+
+    <!-- Error Message -->
+    <div th:if="${errorMessage}"
+         style="color: #e74c3c; font-weight: bold; margin-bottom: 15px; text-align: center;"
+         th:text="${errorMessage}">
+    </div>
+
+    <form th:action="@{/register}" method="post">
+        <input type="text" name="accountHolder" placeholder="Full Name" required>
+        <input type="email" name="email" placeholder="Email Address" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="password" name="confirmPassword" placeholder="Confirm Password" required>
+        <button type="submit">Register</button>
+    </form>
+
+    <div class="login-link">
+        Already have an account? <a th:href="@{/login}">Login here</a>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to MBank</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #2c3e50, #3498db);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            padding: 20px 40px;
+            background-color: rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            color: #f1c40f;
+        }
+
+        .hero {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .hero h2 {
+            font-size: 42px;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        .hero .btn {
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #2c3e50;
+            background-color: #f1c40f;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .hero .btn:hover {
+            background-color: #d4ac0d;
+        }
+
+        footer {
+            padding: 15px 40px;
+            text-align: center;
+            background-color: rgba(0,0,0,0.3);
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media(max-width: 768px){
+            .hero h2 {
+                font-size: 32px;
+            }
+            .hero p {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>MBank</h1>
+    <nav>
+        <a th:href="@{/login}">Login</a>
+        <a th:href="@{/register}">Register</a>
+        <a href="#" onclick="alert('Contact page coming soon')">Contact Us</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <h2>Welcome to MBank</h2>
+    <p>Your trusted partner in modern banking. Manage accounts, transfer funds, and track transactions securely with us.</p>
+    <a th:href="@{/login}" class="btn">Get Started</a>
+</section>
+
+<footer>
+    &copy; 2025 MBank. All rights reserved.
+</footer>
+</body>
+</html>

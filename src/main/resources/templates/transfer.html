@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Transfer Money - MBank</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #9b59b6, #8e44ad);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .transfer-container {
+            background-color: rgba(0,0,0,0.8);
+            padding: 40px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            color: #fff;
+        }
+
+        .account-summary {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .balance-display {
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .balance-label {
+            color: #bdc3c7;
+            font-size: 14px;
+        }
+
+        .balance-amount {
+            font-size: 32px;
+            color: #2ecc71;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+
+        .zar-symbol {
+            color: #f1c40f;
+            font-weight: bold;
+        }
+
+        .account-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .detail-item {
+            background: rgba(255,255,255,0.05);
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            color: #95a5a6;
+            display: block;
+        }
+
+        .detail-value {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .transfer-form {
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #f1c40f;
+        }
+
+        input[type="number"],
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #34495e;
+            border-radius: 8px;
+            font-size: 16px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #9b59b6;
+            box-shadow: 0 0 10px rgba(155, 89, 182, 0.5);
+        }
+
+        .transfer-details {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #9b59b6;
+        }
+
+        .fee-note {
+            font-size: 12px;
+            color: #e74c3c;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: #9b59b6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .submit-btn:hover {
+            background: #8e44ad;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(142, 68, 173, 0.4);
+        }
+
+        .submit-btn:disabled {
+            background: #7f8c8d;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .dashboard-btn {
+            background: #3498db;
+            color: white;
+        }
+
+        .history-btn {
+            background: #e67e22;
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .message {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .success {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+            border: 1px solid #2ecc71;
+        }
+
+        .error {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+        }
+
+        .transfer-limits {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 13px;
+        }
+
+        .limit-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+        }
+
+        .check-recipient {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .check-btn {
+            padding: 8px 15px;
+            background: #34495e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .recipient-info {
+            background: rgba(46, 204, 113, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border: 1px solid #2ecc71;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .transfer-container {
+                padding: 25px;
+                margin: 20px;
+            }
+
+            .account-details {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var accountBalance = /*[[${account.balance}]]*/ 0;
+        /*]]>*/
+    </script>
+</head>
+<body>
+<div class="transfer-container">
+    <h2>Transfer Money</h2>
+
+    <!-- Success/Error Messages -->
+    <div th:if="${successMessage}" class="message success" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="message error" th:text="${errorMessage}"></div>
+
+    <!-- Account Info -->
+    <div class="account-summary" th:if="${account}">
+        <h3>Your Account</h3>
+        <div class="balance-display">
+            <div class="balance-label">Available Balance</div>
+            <div class="balance-amount">
+                <span class="zar-symbol">R</span>
+                <span th:text="${#numbers.formatDecimal(account.balance, 1, 2, 'COMMA')}">0.00</span>
+            </div>
+        </div>
+
+        <div class="account-details">
+            <div class="detail-item">
+                <span class="detail-label">Account Number</span>
+                <span class="detail-value" th:text="${account.accountNumber}">123456</span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-label">Account Holder</span>
+                <span class="detail-value" th:text="${account.accountHolder}">User Name</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form -->
+    <form class="transfer-form" th:action="@{/transfer}" method="post" onsubmit="return validateForm()">
+        <div class="form-group">
+            <label for="toAccount">Recipient Account Number</label>
+            <input type="number" id="toAccount" name="toAccount"
+                   placeholder="Enter 6-digit account number"
+                   min="100000" max="999999" required
+                   onblur="checkRecipient()">
+            <div class="check-recipient">
+                <button type="button" class="check-btn" onclick="checkRecipient()">
+                    Verify Account
+                </button>
+            </div>
+            <div id="recipientInfo" class="recipient-info">
+                <strong>Recipient:</strong>
+                <span id="recipientName">Enter account number to verify</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="amount">Transfer Amount (R)</label>
+            <input type="number" id="amount" name="amount"
+                   placeholder="Enter amount to transfer"
+                   step="0.01" min="0.01" max="100000"
+                   oninput="updateFee()" required>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description (Optional)</label>
+            <input type="text" id="description" name="description"
+                   placeholder="e.g., Rent payment, Gift, etc."
+                   maxlength="100">
+        </div>
+
+        <div class="transfer-details">
+            <div class="limit-item">
+                <span>Transfer Amount:</span>
+                <span id="displayAmount">R0.00</span>
+            </div>
+            <div class="limit-item">
+                <span>Transfer Fee:</span>
+                <span id="feeAmount">R0.00</span>
+            </div>
+            <div class="limit-item" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; font-weight: bold;">
+                <span>Total Debit:</span>
+                <span id="totalAmount">R0.00</span>
+            </div>
+            <div class="fee-note">
+                * R10 fee applies for transfers over R1,000
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn">Transfer Now</button>
+
+        <div class="transfer-limits">
+            <div class="limit-item">
+                <span>Daily Limit:</span>
+                <span>R100,000</span>
+            </div>
+            <div class="limit-item">
+                <span>Minimum Transfer:</span>
+                <span>R1.00</span>
+            </div>
+            <div class="limit-item">
+                <span>Processing Time:</span>
+                <span>Instant</span>
+            </div>
+        </div>
+    </form>
+
+    <div class="action-buttons">
+        <a th:href="@{/dashboard}" class="action-btn dashboard-btn">← Dashboard</a>
+        <a th:href="@{/statement}" class="action-btn history-btn">View Statement</a>
+    </div>
+</div>
+
+<script>
+    function validateForm() {
+        const amount = parseFloat(document.getElementById('amount').value);
+        const toAccount = document.getElementById('toAccount').value;
+        const balance = accountBalance;
+
+        if (!toAccount || toAccount.length !== 6) {
+            alert('Please enter a valid 6-digit account number');
+            return false;
+        }
+
+        if (toAccount === '[[${account.accountNumber}]]') {
+            alert('Cannot transfer to your own account!');
+            return false;
+        }
+
+        if (amount <= 0 || isNaN(amount)) {
+            alert('Amount must be greater than zero');
+            return false;
+        }
+
+        // Calculate fee
+        const fee = amount > 1000 ? 10 : 0;
+        const totalDebit = amount + fee;
+
+        if (totalDebit > balance) {
+            alert('Insufficient funds! Available: R' + balance.toFixed(2) +
+                  ', Required: R' + totalDebit.toFixed(2) + ' (including R' + fee.toFixed(2) + ' fee)');
+            return false;
+        }
+
+        if (amount > 100000) {
+            return confirm('You are transferring R' + amount.toLocaleString() +
+                         '. Are you sure?');
+        }
+
+        return true;
+    }
+
+    function checkRecipient() {
+        const toAccount = document.getElementById('toAccount').value;
+        if (toAccount.length === 6) {
+            document.getElementById('recipientInfo').style.display = 'block';
+            document.getElementById('recipientName').textContent = 'Checking...';
+
+            setTimeout(() => {
+                document.getElementById('recipientName').textContent = 'Account #' + toAccount;
+            }, 1000);
+        }
+    }
+
+    function calculateFee(amount) {
+        return amount > 1000 ? 10 : 0;
+    }
+
+    function updateFee() {
+        const amount = parseFloat(document.getElementById('amount').value) || 0;
+        const fee = calculateFee(amount);
+        const total = amount + fee;
+
+        document.getElementById('feeAmount').textContent = 'R' + fee.toFixed(2);
+        document.getElementById('totalAmount').textContent = 'R' + total.toFixed(2);
+        document.getElementById('displayAmount').textContent = 'R' + amount.toFixed(2);
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        updateFee();
+
+        // Auto-update amount display
+        document.getElementById('amount').addEventListener('input', function() {
+            const amount = parseFloat(this.value) || 0;
+            document.getElementById('displayAmount').textContent = 'R' + amount.toFixed(2);
+        });
+    });
+</script>
+</body>
+</html>
